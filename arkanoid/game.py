@@ -1,4 +1,7 @@
 import pygame as pg
+from arkanoid.escenas import Hall_of_fame, Partida, Portada
+
+icon = pg.image.load('resources/images/ball1.png')
 
 class Pala(pg.Rect):
     def __init__(self):
@@ -19,19 +22,21 @@ class Bola(pg.Rect):
         self.pegado_a_paleta = True
         super(Bola, self).__init__(self.x-(self.ball_size/2), self.y-(self.ball_size), self.ball_size, self.ball_size)
 
-                
-
-
 class Arkanoid:
     def __init__(self) -> None:
         print("Iniciando el juego")
         pg.init()
         print(f"Ancho: {ANCHO} x Alto: {ALTO}")
         self.pantalla = pg.display.set_mode((ANCHO, ALTO))
+        pg.display.set_caption("Arkanoid")
+        pg.display.set_icon(icon)
+        self.escenas = [Portada(self.pantalla), Partida(self.pantalla), Hall_of_fame(self.pantalla)]
         self.clock = pg.time.Clock()
         self.jugador = Pala()
-        
-
+    def jugar(self):
+        for escena in self.escenas:
+            escena.bucle_principal()
+            pg.display.flip()
     def bucle_juego(self):
         loop = True
         while loop == True:
@@ -53,12 +58,10 @@ class Arkanoid:
             if estado_teclas[pg.K_DOWN]:
                 pass
             #bucle de juego:
-            self.pantalla.fill((220,0,0))
-            pg.draw.rect(self.pantalla, (255,255,255), self.jugador)
-            pg.draw.rect(self.pantalla, (255,255,255), self.jugador.bola)
+            #pg.draw.rect(self.pantalla, (255,255,255), self.jugador)
+            #pg.draw.rect(self.pantalla, (255,255,255), self.jugador.bola)
             pg.display.flip()
     
-
 if __name__ == "__main__":
     from __init__ import ANCHO, ALTO
     juego = Arkanoid()
