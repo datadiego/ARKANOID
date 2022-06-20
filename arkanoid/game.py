@@ -51,7 +51,7 @@ class Arkanoid:
             if estado_teclas[pg.K_UP]:
                 pass
             if estado_teclas[pg.K_DOWN]:
-                pass     
+                pass
             #bucle de juego:
             self.pantalla.fill((220,0,0))
             pg.draw.rect(self.pantalla, (255,255,255), self.jugador)
