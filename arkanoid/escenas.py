@@ -1,7 +1,7 @@
 import pygame as pg
 import os
 from arkanoid import ANCHO, ALTO
-from arkanoid.palabola import Pala, Bola
+from arkanoid.elementos import Pala, Bola
 
 class Escena:
     def __init__(self, pantalla: pg.Surface):
