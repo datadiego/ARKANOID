@@ -1,7 +1,7 @@
 import pygame as pg
 from arkanoid.escenas import Hall_of_fame, Partida, Portada
-
-icon = pg.image.load('resources/images/ball1.png')
+import os
+icon = pg.image.load(os.path.join("resources", "images", "ball1.png"))
 
 class Pala(pg.Rect):
     def __init__(self):
@@ -26,6 +26,7 @@ class Arkanoid:
     def __init__(self) -> None:
         print("Iniciando el juego")
         pg.init()
+        pg.font.init()
         print(f"Ancho: {ANCHO} x Alto: {ALTO}")
         self.pantalla = pg.display.set_mode((ANCHO, ALTO))
         pg.display.set_caption("Arkanoid")

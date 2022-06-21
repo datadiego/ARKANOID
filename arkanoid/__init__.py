@@ -1,3 +1,3 @@
-ANCHO = 800
-ALTO = 400
 import pygame as pg
+ANCHO = 720
+ALTO = 480
