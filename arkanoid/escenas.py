@@ -19,7 +19,7 @@ class Portada(Escena):
         pg.display.flip()
 
     def pintar_texto(self):
-        tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 30)
+        tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 34)
         texto_start = pg.font.Font.render(tipografia, "Pulsa la barra espaciadora para empezar", True, (255, 255, 255))
         pos_x = ANCHO/2 - (texto_start.get_width()/2)
         pos_y = ALTO - (ALTO/3.2)
@@ -28,7 +28,7 @@ class Portada(Escena):
 
     def bucle_principal(self):
         loop = True
-        self.pantalla.fill((255,0,0))
+        self.pantalla.fill((23,111,193))
         self.pintar_logo()
         self.pintar_texto()
         
