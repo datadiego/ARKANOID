@@ -19,7 +19,7 @@ class Portada(Escena):
         pg.display.flip()
 
     def pintar_texto(self):
-        tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 34)
+        tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 30)
         texto_start = pg.font.Font.render(tipografia, "Pulsa la barra espaciadora para empezar", True, (255, 255, 255))
         pos_x = ANCHO/2 - (texto_start.get_width()/2)
         pos_y = ALTO - (ALTO/3.2)
@@ -41,9 +41,15 @@ class Portada(Escena):
                     pg.quit()
                     
 class Partida(Escena):
+    def __init__(self, pantalla: pg.Surface):
+        super().__init__(pantalla)
+        self.background = pg.image.load(os.path.join("resources", "images", "background.jpg"))
+
     def bucle_principal(self):
         loop = True
         self.pantalla.fill((0,255,0))
+        self.pantalla.blit(self.background,(0, 0))
+
         pg.display.flip()
         while loop == True:
             for evento in pg.event.get():
@@ -52,6 +58,9 @@ class Partida(Escena):
                         loop = False   
                 if evento.type == pg.QUIT:
                     pg.quit()
+    
+    def pintar_fondo(self):
+        pass
             
 
 class Hall_of_fame(Escena):
