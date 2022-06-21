@@ -1,7 +1,8 @@
-from cgitb import text
 import pygame as pg
 import os
 from arkanoid import ANCHO, ALTO
+from arkanoid.palabola import Pala, Bola
+
 class Escena:
     def __init__(self, pantalla: pg.Surface):
         self.pantalla = pantalla
@@ -44,12 +45,14 @@ class Partida(Escena):
     def __init__(self, pantalla: pg.Surface):
         super().__init__(pantalla)
         self.background = pg.image.load(os.path.join("resources", "images", "background.jpg"))
+        self.jugador = Pala(self.pantalla)
+        #self.bola = Bola()
 
     def bucle_principal(self):
         loop = True
-        self.pantalla.fill((0,255,0))
         self.pantalla.blit(self.background,(0, 0))
-
+        self.jugador.muestra_pala()
+        
         pg.display.flip()
         while loop == True:
             for evento in pg.event.get():

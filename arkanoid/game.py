@@ -3,24 +3,9 @@ from arkanoid.escenas import Hall_of_fame, Partida, Portada
 import os
 icon = pg.image.load(os.path.join("resources", "images", "ball1.png"))
 
-class Pala(pg.Rect):
-    def __init__(self):
-        self.width = 100
-        self.height = 20
-        self.x = ANCHO / 2 - self.width/2
-        self.y = ALTO - 50
-        super(Pala, self).__init__(self.x, self.y, self.width, self.height)
-        self.bola = Bola(ANCHO/2, self.y, self.height)
 
-class Bola(pg.Rect):
-    def __init__(self, x, y, size):
-        self.ball_size = size
-        self.x = x
-        self.y = y
-        self.vel_x = 0
-        self.vel_y = 0
-        self.pegado_a_paleta = True
-        super(Bola, self).__init__(self.x-(self.ball_size/2), self.y-(self.ball_size), self.ball_size, self.ball_size)
+
+
 
 class Arkanoid:
     def __init__(self) -> None:
@@ -33,7 +18,7 @@ class Arkanoid:
         pg.display.set_icon(icon)
         self.escenas = [Portada(self.pantalla), Partida(self.pantalla), Hall_of_fame(self.pantalla)]
         self.clock = pg.time.Clock()
-        self.jugador = Pala()
+        
     def jugar(self):
         for escena in self.escenas:
             escena.bucle_principal()
