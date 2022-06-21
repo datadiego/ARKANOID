@@ -46,21 +46,31 @@ class Partida(Escena):
         super().__init__(pantalla)
         self.background = pg.image.load(os.path.join("resources", "images", "background.jpg"))
         self.jugador = Pala(self.pantalla)
+        self.bola = Bola(self.pantalla)
+        self.clock = pg.time.Clock()
         #self.bola = Bola()
 
     def bucle_principal(self):
         loop = True
-        self.pantalla.blit(self.background,(0, 0))
-        self.jugador.muestra_pala()
-        
-        pg.display.flip()
         while loop == True:
             for evento in pg.event.get():
                 if evento.type == pg.KEYDOWN:
                     if evento.key == pg.K_ESCAPE:
-                        loop = False   
+                        loop = False
                 if evento.type == pg.QUIT:
                     pg.quit()
+            estado_teclas = pg.key.get_pressed()
+            if estado_teclas[pg.K_LEFT]:
+                self.jugador.mueve_izquierda()
+            if estado_teclas[pg.K_RIGHT]:
+                self.jugador.mueve_derecha()
+            self.pantalla.blit(self.background,(0, 0))
+            self.jugador.muestra_pala()
+            self.bola.mover_bola()
+            self.bola.muestra_bola()
+            pg.display.flip()
+            self.clock.tick(60)
+            
     
     def pintar_fondo(self):
         pass
