@@ -48,6 +48,7 @@ class Partida(Escena):
         self.background = pg.image.load(os.path.join("resources", "images", "background.jpg"))
         self.jugador = Pala()
         self.bola = Bola(midbottom = self.jugador.rect.midtop)
+        self.puntuacion = 0
         self.crear_muro()
         
     def crear_muro(self):
@@ -55,7 +56,7 @@ class Partida(Escena):
         num_columnas = 6
         self.ladrillos = pg.sprite.Group()
         self.ladrillos.empty()
-        self.puntuacion = 0
+        
 
         margen_y = 40
 
@@ -105,16 +106,19 @@ class Partida(Escena):
                 
             self.pantalla.blit(self.bola.image, self.bola.rect)
             pg.display.flip()
-            loop = self.bola.game_over()
+            loop = self.bola.game_over(self.puntuacion)
 
     
 
 class Hall_of_fame(Escena):
+    def __init__(self, pantalla: pg.Surface):
+        super().__init__(pantalla)
+        
+
     def bucle_principal(self):
         self.pantalla.fill((0,0,255))
         pg.display.flip()
         loop = True
-        jugador = input("Ingresa tu nombre")
         while loop == True:
             for evento in pg.event.get():
                 if evento.type == pg.KEYDOWN:
@@ -122,5 +126,6 @@ class Hall_of_fame(Escena):
                         loop = False   
                 if evento.type == pg.QUIT:
                     pg.quit()
+            
             
 

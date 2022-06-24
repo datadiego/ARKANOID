@@ -74,6 +74,7 @@ class Bola(Sprite):
     def colision(self, otro):
         if self.rect.colliderect(otro):
             self.vel_y = -self.vel_y
+            #TODO: La bola puede quedarse atrapada en medio de la pala
 
     def update(self, pala):
         if not self.en_movimiento:
@@ -89,13 +90,28 @@ class Bola(Sprite):
             if self.rect.bottom > ALTO:
                 self.perder_vida()
                 self.en_movimiento = False
+
     def perder_vida(self):
         self.vidas -= 1
         print(f"Tienes {self.vidas} vidas")
-    
-    def game_over(self):
+        #TODO: ???? Las bolas no deberian tener vidas, esto deberia de poderse manipular en la escena partida, esta solucion es la mas facil
+        
+    def escribe_records(self, puntos):
+        nombre = self.valida_input()
+        puntuaciones = open("puntuaciones.csv", "a")
+        puntuaciones.write(f"{nombre}, {puntos}\n")
+        puntuaciones.close()
+        #TODO: Los records deberian de ordenarse segun la puntuación
+
+    def game_over(self, puntos):
         if self.vidas == 0:
+            self.escribe_records(puntos)
             return False
         else:
             return True
+    def valida_input(self):
+        output = ""
+        while output == "":
+            output = str(input("Nombre: "))
+        return output
                 
