@@ -1,9 +1,11 @@
+from xml.etree.ElementTree import TreeBuilder
 from arkanoid import ANCHO, ALTO, FPS
 import random
 import pygame as pg
 from pygame.sprite import Sprite
 import os
 randint = random.randint
+
 class Pala(Sprite):
     fps_ani = 12
     limite_iteracion = FPS // fps_ani
@@ -55,24 +57,26 @@ class Ladrillo(Sprite):
         self.image = pg.image.load(ladrillo_verde)
         ancho = self.image.get_width()
         alto = self.image.get_height()
-
         self.rect = self.image.get_rect(x=columna * ancho, y=fila* alto)
+        self.puntos = 10
             
 
 class Bola(Sprite):
     vel_x = -5
     vel_y = -5
+    vidas = 3
     def __init__(self, **kwargs):
         super().__init__()
         self.image = pg.image.load(os.path.join("resources", "images", "ball1.png"))
         self.rect = self.image.get_rect(**kwargs)
+        self.en_movimiento = False
 
     def colision(self, otro):
         if self.rect.colliderect(otro):
             self.vel_y = -self.vel_y
 
-    def update(self, pala, iniciado):
-        if not iniciado:
+    def update(self, pala):
+        if not self.en_movimiento:
             self.rect.midbottom = pala.rect.midtop
         else:
             self.rect.x += self.vel_x
@@ -83,8 +87,15 @@ class Bola(Sprite):
             if self.rect.top < 0:
                 self.vel_y = -self.vel_y
             if self.rect.bottom > ALTO:
-                self.game_over()
+                self.perder_vida()
+                self.en_movimiento = False
+    def perder_vida(self):
+        self.vidas -= 1
+        print(f"Tienes {self.vidas} vidas")
     
     def game_over(self):
-        pass
+        if self.vidas == 0:
+            return False
+        else:
+            return True
                 

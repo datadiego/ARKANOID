@@ -55,6 +55,7 @@ class Partida(Escena):
         num_columnas = 6
         self.ladrillos = pg.sprite.Group()
         self.ladrillos.empty()
+        self.puntuacion = 0
 
         margen_y = 40
 
@@ -65,17 +66,16 @@ class Partida(Escena):
                 ladrillo.rect.x += margen_x
                 ladrillo.rect.y += margen_y
                 self.ladrillos.add(ladrillo)
-
+    
     def bucle_principal(self):
         loop = True
-        juego_iniciado = False
         while loop == True:
             self.clock.tick(FPS) #IMPORTANTE AQUI
             for evento in pg.event.get():
                 if evento.type == pg.KEYDOWN and evento.key == pg.K_ESCAPE:
                     pg.quit()
                 if evento.type == pg.KEYDOWN and evento.key == pg.K_SPACE:
-                    juego_iniciado = True
+                    self.bola.en_movimiento = True
                 if evento.type == pg.QUIT:
                     pg.quit()
             #Pintar el muro
@@ -93,12 +93,19 @@ class Partida(Escena):
             #pintar pelota
             self.bola.colision(self.jugador)
             
-            self.bola.update(self.jugador, juego_iniciado)
+            self.bola.update(self.jugador)
+
             golpeados = pg.sprite.spritecollide(self.bola, self.ladrillos, True)
             if len(golpeados) > 0:
                 self.bola.vel_y *= -1
+                for elementos in golpeados:
+                    self.puntuacion += 1
+                    print(self.puntuacion)
+            
+                
             self.pantalla.blit(self.bola.image, self.bola.rect)
             pg.display.flip()
+            loop = self.bola.game_over()
 
     
 
@@ -107,6 +114,7 @@ class Hall_of_fame(Escena):
         self.pantalla.fill((0,0,255))
         pg.display.flip()
         loop = True
+        jugador = input("Ingresa tu nombre")
         while loop == True:
             for evento in pg.event.get():
                 if evento.type == pg.KEYDOWN:
