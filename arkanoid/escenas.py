@@ -1,11 +1,12 @@
 import pygame as pg
 import os
-from arkanoid import ANCHO, ALTO
-from arkanoid.elementos import Pala, Bola
+from arkanoid import ANCHO, ALTO, FPS
+from arkanoid.elementos import Pala, Bola, Ladrillo
 
 class Escena:
     def __init__(self, pantalla: pg.Surface):
         self.pantalla = pantalla
+        self.clock = pg.time.Clock()
 
 class Portada(Escena):
     def __init__(self, pantalla: pg.Surface):
@@ -45,36 +46,59 @@ class Partida(Escena):
     def __init__(self, pantalla: pg.Surface):
         super().__init__(pantalla)
         self.background = pg.image.load(os.path.join("resources", "images", "background.jpg"))
-        self.jugador = Pala(self.pantalla)
-        self.bola = Bola(self.pantalla)
-        self.clock = pg.time.Clock()
-        #self.bola = Bola()
+        self.jugador = Pala()
+        self.bola = Bola(midbottom = self.jugador.rect.midtop)
+        self.crear_muro()
+        
+    def crear_muro(self):
+        num_filas = 5
+        num_columnas = 6
+        self.ladrillos = pg.sprite.Group()
+        self.ladrillos.empty()
+
+        margen_y = 40
+
+        for fila in range(num_filas):
+            for columna in range(num_columnas):
+                ladrillo = Ladrillo(fila, columna)
+                margen_x = (ANCHO - ladrillo.image.get_width()*num_columnas) / 2
+                ladrillo.rect.x += margen_x
+                ladrillo.rect.y += margen_y
+                self.ladrillos.add(ladrillo)
 
     def bucle_principal(self):
         loop = True
+        juego_iniciado = False
         while loop == True:
+            self.clock.tick(FPS) #IMPORTANTE AQUI
             for evento in pg.event.get():
-                if evento.type == pg.KEYDOWN:
-                    if evento.key == pg.K_ESCAPE:
-                        loop = False
+                if evento.type == pg.KEYDOWN and evento.key == pg.K_ESCAPE:
+                    pg.quit()
+                if evento.type == pg.KEYDOWN and evento.key == pg.K_SPACE:
+                    juego_iniciado = True
                 if evento.type == pg.QUIT:
                     pg.quit()
-            estado_teclas = pg.key.get_pressed()
-            if estado_teclas[pg.K_LEFT]:
-                self.jugador.mueve_izquierda()
-            if estado_teclas[pg.K_RIGHT]:
-                self.jugador.mueve_derecha()
+            #Pintar el muro
+            
+
             self.pantalla.blit(self.background,(0, 0))
-            self.jugador.muestra_pala()
-            self.bola.mover_bola()
-            self.bola.muestra_bola()
+
+            #pintar jugador
+            self.jugador.update()
+            self.pantalla.blit(self.jugador.img, self.jugador.rect)
+
+            #pintar muro
+            self.ladrillos.draw(self.pantalla)
+
+            #pintar pelota
+            self.colisiones()
+            self.bola.update(self.jugador, juego_iniciado)
+            self.pantalla.blit(self.bola.image, self.bola.rect)
             pg.display.flip()
-            self.clock.tick(60)
-            
-    
-    def pintar_fondo(self):
-        pass
-            
+
+    def colisiones(self):
+        if self.jugador.rect.colliderect(self.bola.rect):
+            self.bola.vel_y = -self.bola.vel_y
 
 class Hall_of_fame(Escena):
     def bucle_principal(self):
