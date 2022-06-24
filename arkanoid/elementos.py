@@ -57,6 +57,7 @@ class Ladrillo(Sprite):
         alto = self.image.get_height()
 
         self.rect = self.image.get_rect(x=columna * ancho, y=fila* alto)
+            
 
 class Bola(Sprite):
     vel_x = -5
@@ -65,6 +66,10 @@ class Bola(Sprite):
         super().__init__()
         self.image = pg.image.load(os.path.join("resources", "images", "ball1.png"))
         self.rect = self.image.get_rect(**kwargs)
+
+    def colision(self, otro):
+        if self.rect.colliderect(otro):
+            self.vel_y = -self.vel_y
 
     def update(self, pala, iniciado):
         if not iniciado:

@@ -91,14 +91,16 @@ class Partida(Escena):
             self.ladrillos.draw(self.pantalla)
 
             #pintar pelota
-            self.colisiones()
+            self.bola.colision(self.jugador)
+            
             self.bola.update(self.jugador, juego_iniciado)
+            golpeados = pg.sprite.spritecollide(self.bola, self.ladrillos, True)
+            if len(golpeados) > 0:
+                self.bola.vel_y *= -1
             self.pantalla.blit(self.bola.image, self.bola.rect)
             pg.display.flip()
 
-    def colisiones(self):
-        if self.jugador.rect.colliderect(self.bola.rect):
-            self.bola.vel_y = -self.bola.vel_y
+    
 
 class Hall_of_fame(Escena):
     def bucle_principal(self):
