@@ -1,6 +1,8 @@
 # ARKANOID
 
-Recreacion del conocido juego Arkanoid.
+## Recreacion del conocido juego Arkanoid realizado durante el bootcamp KeepCoding.
+
+![alt](/resources/images/img_0.png)
 
 -Clona este repositorio a tu PC:
 ```
