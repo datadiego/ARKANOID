@@ -4,6 +4,8 @@ import random
 import pygame as pg
 from pygame.sprite import Sprite
 import os
+from arkanoid.funciones_records import extrae_valores_records
+
 randint = random.randint
 
 class Pala(Sprite):
@@ -64,7 +66,7 @@ class Ladrillo(Sprite):
 class Bola(Sprite):
     vel_x = -5
     vel_y = -5
-    vidas = 3
+    vidas = 1
     def __init__(self, **kwargs):
         super().__init__()
         self.image = pg.image.load(os.path.join("resources", "images", "ball1.png"))
@@ -100,15 +102,18 @@ class Bola(Sprite):
         nombre = self.valida_input()
         puntuaciones = open("puntuaciones.csv", "r")
         if puntuaciones.read() == "":
+            #Si no hay archivo de guardado previo, crealo
             puntuaciones = open("puntuaciones.csv", "w")
-            puntuaciones.write("Jugador,Puntos\n")
             puntuaciones.write(f"{nombre},{puntos}\n")
-            for x in range(0,4):
-                puntuaciones.write("AAA,0\n")
 
         else:
-            puntuaciones = open("puntuaciones.csv", "w")
-            puntuaciones.write(f"{nombre},{puntos}\n")
+            #puntuaciones = open("puntuaciones.csv", "w")
+            valores = extrae_valores_records("puntuaciones.csv")
+            min_record = min(valores)
+            if puntos >= min_record and len(valores) < 4: 
+                #Cuando la tabla de records no ha alcanzado el limite y nuestra puntuacion es mayor que la ultima, introducelo al final
+                puntuaciones = open("puntuaciones.csv", "a")
+                puntuaciones.write(f"{nombre},{puntos}\n")
             #comprobamos que hay record
         
         puntuaciones.close()
