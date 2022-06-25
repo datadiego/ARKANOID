@@ -79,9 +79,7 @@ class Partida(Escena):
                     self.bola.en_movimiento = True
                 if evento.type == pg.QUIT:
                     pg.quit()
-            #Pintar el muro
-            
-
+            #Pintar imagen de fondo
             self.pantalla.blit(self.background,(0, 0))
 
             #pintar jugador
@@ -93,18 +91,17 @@ class Partida(Escena):
 
             #pintar pelota
             self.bola.colision(self.jugador)
-            
             self.bola.update(self.jugador)
+            self.pantalla.blit(self.bola.image, self.bola.rect)
 
+            #Guardamos los ladrillos que colisionan con la bola
             golpeados = pg.sprite.spritecollide(self.bola, self.ladrillos, True)
             if len(golpeados) > 0:
-                self.bola.vel_y *= -1
-                for elementos in golpeados:
+                #Si hemos golpeado alguno invertimos la velocidad_y y sumamos 1 por cada elemento en la lista
+                self.bola.vel_y = -self.bola.vel_y
+                for _ in golpeados:
                     self.puntuacion += 1
                     print(self.puntuacion)
-            
-                
-            self.pantalla.blit(self.bola.image, self.bola.rect)
             pg.display.flip()
             loop = self.bola.game_over(self.puntuacion)
 
