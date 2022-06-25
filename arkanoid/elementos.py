@@ -64,7 +64,7 @@ class Ladrillo(Sprite):
 
 class Bola(Sprite):
     vel_x = -5
-    vel_y = -5
+    vel_y = -8
     vidas = 1
     def __init__(self, **kwargs):
         super().__init__()
@@ -99,6 +99,7 @@ class Bola(Sprite):
         
     def escribe_records(self, puntos):
         nombre = self.valida_input()
+        puntuaciones = open("puntuaciones.csv", "a")
         puntuaciones = open("puntuaciones.csv", "r")
         if puntuaciones.read() == "":
             #Si no hay archivo de guardado previo, crealo
@@ -109,7 +110,7 @@ class Bola(Sprite):
             #puntuaciones = open("puntuaciones.csv", "w")
             valores = extrae_valores_records("puntuaciones.csv")
             min_record = min(valores)
-            if puntos >= min_record and len(valores) < 4: 
+            if len(valores) < 3: 
                 #Cuando la tabla de records no ha alcanzado el limite y nuestra puntuacion es mayor que la ultima, introducelo al final
                 puntuaciones = open("puntuaciones.csv", "a")
                 puntuaciones.write(f"{nombre},{puntos}\n")
