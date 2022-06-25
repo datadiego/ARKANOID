@@ -1,4 +1,3 @@
-from xml.etree.ElementTree import TreeBuilder
 from arkanoid import ANCHO, ALTO, FPS
 import random
 import pygame as pg
