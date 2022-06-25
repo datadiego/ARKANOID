@@ -98,8 +98,19 @@ class Bola(Sprite):
         
     def escribe_records(self, puntos):
         nombre = self.valida_input()
-        puntuaciones = open("puntuaciones.csv", "a")
-        puntuaciones.write(f"{nombre}, {puntos}\n")
+        puntuaciones = open("puntuaciones.csv", "r")
+        if puntuaciones.read() == "":
+            puntuaciones = open("puntuaciones.csv", "w")
+            puntuaciones.write("Jugador,Puntos\n")
+            puntuaciones.write(f"{nombre},{puntos}\n")
+            for x in range(0,4):
+                puntuaciones.write("AAA,0\n")
+
+        else:
+            puntuaciones = open("puntuaciones.csv", "w")
+            puntuaciones.write(f"{nombre},{puntos}\n")
+            #comprobamos que hay record
+        
         puntuaciones.close()
         #TODO: Los records deberian de ordenarse segun la puntuación
 

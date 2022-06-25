@@ -112,6 +112,8 @@ venv.bak/
 
 #Archivos de guardado
 puntuaciones.csv
+records.py
+records2.py
 
 # Spyder project settings
 .spyderproject
