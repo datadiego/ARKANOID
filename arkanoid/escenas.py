@@ -57,7 +57,6 @@ class Partida(Escena):
         self.ladrillos = pg.sprite.Group()
         self.ladrillos.empty()
         
-
         margen_y = 40
 
         for fila in range(num_filas):
@@ -110,7 +109,16 @@ class Partida(Escena):
 class Hall_of_fame(Escena):
     def __init__(self, pantalla: pg.Surface):
         super().__init__(pantalla)
-        
+
+    
+    def crear_texto(self):
+        tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 30)
+        texto_start = pg.font.Font.render(tipografia, "Records", True, (255, 255, 255))
+        pos_x = ANCHO/2 - (texto_start.get_width()/2)
+        pos_y = ALTO/12
+        self.pantalla.blit(texto_start, (pos_x, pos_y))
+        pg.display.flip()
+
 
     def bucle_principal(self):
         self.pantalla.fill((0,0,255))
@@ -123,6 +131,7 @@ class Hall_of_fame(Escena):
                         loop = False   
                 if evento.type == pg.QUIT:
                     pg.quit()
+            self.crear_texto()
             
             
 

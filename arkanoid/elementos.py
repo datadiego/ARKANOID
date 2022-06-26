@@ -3,7 +3,8 @@ import random
 import pygame as pg
 from pygame.sprite import Sprite
 import os
-from arkanoid.funciones_records import extrae_valores_records
+import csv
+from arkanoid.funciones_records import bubble_sort, extrae_nombres_records, extrae_valores_records, limit_array
 
 randint = random.randint
 
@@ -64,7 +65,7 @@ class Ladrillo(Sprite):
 
 class Bola(Sprite):
     vel_x = -5
-    vel_y = -8
+    vel_y = -14
     vidas = 1
     def __init__(self, **kwargs):
         super().__init__()
@@ -96,27 +97,54 @@ class Bola(Sprite):
         self.vidas -= 1
         print(f"Tienes {self.vidas} vidas")
         #TODO: ???? Las bolas no deberian tener vidas, esto deberia de poderse manipular en la escena partida, esta solucion es la mas facil
-        
+       
     def escribe_records(self, puntos):
-        nombre = self.valida_input()
-        puntuaciones = open("puntuaciones.csv", "a")
-        puntuaciones = open("puntuaciones.csv", "r")
-        if puntuaciones.read() == "":
-            #Si no hay archivo de guardado previo, crealo
-            puntuaciones = open("puntuaciones.csv", "w")
-            puntuaciones.write(f"{nombre},{puntos}\n")
-
+        csv_filer = open("puntuaciones.csv", "a")
+        csv_file = open("puntuaciones.csv", "r")
+        limite_records = 10
+        if csv_file.read() == "":
+            print("No hay records previos")
+            nombre_jugador = self.valida_input()
+            csv_file = open("puntuaciones.csv", "w")
+            csv_file.write(nombre_jugador)
+            csv_file.write(",")
+            csv_file.write(str(puntos))
+            csv_file.write("\n")
+            return
         else:
-            #puntuaciones = open("puntuaciones.csv", "w")
+            print("Ya hay records previos") 
             valores = extrae_valores_records("puntuaciones.csv")
+            nombres = extrae_nombres_records("puntuaciones.csv")
+            print(valores)
+            print(nombres)
             min_record = min(valores)
-            if len(valores) < 3: 
-                #Cuando la tabla de records no ha alcanzado el limite y nuestra puntuacion es mayor que la ultima, introducelo al final
-                puntuaciones = open("puntuaciones.csv", "a")
-                puntuaciones.write(f"{nombre},{puntos}\n")
-            #comprobamos que hay record
-        
-        puntuaciones.close()
+            '''
+            if puntos > min_record:
+                nombre_jugador = self.valida_input()
+                csv_file = open("puntuaciones.csv", "a")
+                csv_file.write(nombre_jugador)
+                csv_file.write(",")
+                csv_file.write(str(puntos))
+                csv_file.write("\n")
+            '''
+
+            if puntos > min_record or len(valores) < limite_records:
+                nombre_jugador = self.valida_input()
+                valores.append(puntos)
+                nombres.append(nombre_jugador)
+                bubble_sort(valores, nombres)
+                limit_array(valores, limite_records)
+                limit_array(valores, limite_records)
+                csv_file = open("puntuaciones.csv", "w")
+                for i in range(len(valores)):
+                    csv_file.write(nombres[i])
+                    csv_file.write(",")
+                    csv_file.write(str(valores[i]))
+                    csv_file.write("\n")
+
+
+                
+        csv_file.close()
         #TODO: Los records deberian de ordenarse segun la puntuación
 
     def game_over(self, puntos):
