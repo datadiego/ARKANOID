@@ -2,6 +2,7 @@ import pygame as pg
 import os
 from arkanoid import ANCHO, ALTO, FPS
 from arkanoid.elementos import Pala, Bola, Ladrillo
+from arkanoid.funciones_records import extrae_nombres_records, extrae_valores_records
 
 class Escena:
     def __init__(self, pantalla: pg.Surface):
@@ -108,21 +109,26 @@ class Partida(Escena):
 
 class Hall_of_fame(Escena):
     def __init__(self, pantalla: pg.Surface):
-        super().__init__(pantalla)
-
+        super().__init__(pantalla)        
     
     def crear_texto(self):
-        tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 30)
-        texto_start = pg.font.Font.render(tipografia, "Records", True, (255, 255, 255))
-        pos_x = ANCHO/2 - (texto_start.get_width()/2)
-        pos_y = ALTO/12
-        self.pantalla.blit(texto_start, (pos_x, pos_y))
+        tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 40)
+        csv_file = "puntuaciones.csv"
+        valores = extrae_valores_records(csv_file)
+        nombres = extrae_nombres_records(csv_file)
+        borde = 100
+        for index in range(len(valores)):
+            texto_nombre = pg.font.Font.render(tipografia, nombres[index], True, (255, 255, 255))
+            texto_record = pg.font.Font.render(tipografia, str(valores[index]), True, (255, 255, 255))
+            pos_x = ANCHO/2 - texto_nombre.get_width()
+            pos_x2 = ANCHO/2 + borde/2
+            pos_y = index*texto_nombre.get_height() + borde*1.5
+            self.pantalla.blit(texto_nombre, (pos_x, pos_y))
+            self.pantalla.blit(texto_record, (pos_x2, pos_y))
         pg.display.flip()
 
 
     def bucle_principal(self):
-        self.pantalla.fill((0,0,255))
-        pg.display.flip()
         loop = True
         while loop == True:
             for evento in pg.event.get():
@@ -131,7 +137,11 @@ class Hall_of_fame(Escena):
                         loop = False   
                 if evento.type == pg.QUIT:
                     pg.quit()
+            self.pantalla.fill((0,0,100))
             self.crear_texto()
+            pg.display.flip()
+            
+            
             
             
 
