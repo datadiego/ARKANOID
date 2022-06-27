@@ -113,10 +113,13 @@ class Hall_of_fame(Escena):
     
     def crear_texto(self):
         tipografia = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 40)
+        tipografia_titulo = pg.font.Font(os.path.join("resources", "fonts", "CabinSketch-Bold.ttf"), 60)
         csv_file = "puntuaciones.csv"
         valores = extrae_valores_records(csv_file)
         nombres = extrae_nombres_records(csv_file)
         borde = 100
+        texto_titulo = pg.font.Font.render(tipografia_titulo, "Records", True, (255, 255, 255))
+        self.pantalla.blit(texto_titulo, ((ANCHO-texto_titulo.get_width())/2, 20))
         for index in range(len(valores)):
             texto_nombre = pg.font.Font.render(tipografia, nombres[index], True, (255, 255, 255))
             texto_record = pg.font.Font.render(tipografia, str(valores[index]), True, (255, 255, 255))
