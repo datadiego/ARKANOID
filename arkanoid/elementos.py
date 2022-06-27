@@ -1,4 +1,4 @@
-from arkanoid import ANCHO, ALTO, FPS
+from arkanoid import ANCHO, ALTO, FPS, VIDAS
 import random
 import pygame as pg
 from pygame.sprite import Sprite
@@ -66,7 +66,7 @@ class Ladrillo(Sprite):
 class Bola(Sprite):
     vel_x = -5
     vel_y = -14
-    vidas = 1
+    vidas = VIDAS
     def __init__(self, **kwargs):
         super().__init__()
         self.image = pg.image.load(os.path.join("resources", "images", "ball1.png"))
@@ -99,7 +99,7 @@ class Bola(Sprite):
         #TODO: ???? Las bolas no deberian tener vidas, esto deberia de poderse manipular en la escena partida, esta solucion es la mas facil
        
     def escribe_records(self, puntos):
-        csv_filer = open("puntuaciones.csv", "a")
+        csv_file = open("puntuaciones.csv", "a")
         csv_file = open("puntuaciones.csv", "r")
         limite_records = 10
         if csv_file.read() == "":
