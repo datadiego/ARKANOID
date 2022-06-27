@@ -61,8 +61,9 @@ class Partida(Escena):
         margen_y = 40
 
         for fila in range(num_filas):
+            puntos = (num_filas - fila)*10
             for columna in range(num_columnas):
-                ladrillo = Ladrillo(fila, columna)
+                ladrillo = Ladrillo(fila, columna, puntos)
                 margen_x = (ANCHO - ladrillo.image.get_width()*num_columnas) / 2
                 ladrillo.rect.x += margen_x
                 ladrillo.rect.y += margen_y
@@ -99,8 +100,8 @@ class Partida(Escena):
             if len(golpeados) > 0:
                 #Si hemos golpeado alguno invertimos la velocidad_y y sumamos 1 por cada elemento en la lista
                 self.bola.vel_y = -self.bola.vel_y
-                for _ in golpeados:
-                    self.puntuacion += 1
+                for ladrillo in golpeados:
+                    self.puntuacion += ladrillo.puntos
                     print(self.puntuacion)
             pg.display.flip()
             loop = self.bola.game_over(self.puntuacion)

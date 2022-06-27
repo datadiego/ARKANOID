@@ -53,14 +53,14 @@ class Pala(Sprite):
             self.rect.left = 0
 
 class Ladrillo(Sprite):
-    def __init__(self, fila, columna):
+    def __init__(self, fila, columna, puntos):
         super().__init__()
         ladrillo_verde = os.path.join("resources", "images", "greenTile.png")
         self.image = pg.image.load(ladrillo_verde)
         ancho = self.image.get_width()
         alto = self.image.get_height()
         self.rect = self.image.get_rect(x=columna * ancho, y=fila* alto)
-        self.puntos = 10
+        self.puntos = puntos
             
 
 class Bola(Sprite):
@@ -145,7 +145,6 @@ class Bola(Sprite):
 
                 
         csv_file.close()
-        #TODO: Los records deberian de ordenarse segun la puntuación
 
     def game_over(self, puntos):
         if self.vidas == 0:
@@ -153,6 +152,7 @@ class Bola(Sprite):
             return False
         else:
             return True
+
     def valida_input(self):
         output = ""
         while output == "":
